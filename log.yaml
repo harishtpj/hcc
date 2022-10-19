@@ -1,0 +1,13 @@
+Project: hcc
+Description: Harish's C Compiler - Inspired by Project of acwj
+Author: M.V.Harish Kumar
+Date Started: 19 October, 2022
+
+---
+Day: 1
+Date: 19-10-2022
+Log:
+  - Created Basic Skeleton of hcc project
+  - Added lexing Capabilities
+  
+---
