@@ -7,7 +7,6 @@
 // Return the position of character c in string s, or -1 if c not found
 static int chrpos(char *s, int c) {
   char *p;
-
   p = strchr(s, c);
   return (p ? p - s : -1);
 }
@@ -67,6 +66,7 @@ int scan(struct token *t) {
 
     switch (c) {
     case EOF:
+        t->token = T_EOF;
         return 0;
     case '+':
         t->token = T_PLUS;

@@ -1,7 +1,7 @@
 CC = gcc
 
-scanner: main.c scan.c
-	$(CC) -o scanner -g main.c scan.c
+parser: expr.c interp.c main.c scan.c tree.c
+	$(CC) -o parser -g expr.c interp.c main.c scan.c tree.c
 
 clean:
-	rm -f scanner *.o
+	rm -f parser *.o

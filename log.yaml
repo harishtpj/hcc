@@ -6,8 +6,14 @@ Date Started: 19 October, 2022
 ---
 Day: 1
 Date: 19-10-2022
+Level: 1
 Log:
   - Created Basic Skeleton of hcc project
   - Added lexing Capabilities
   
 ---
+Day: 2
+Date: 22-10-2022
+Level: 2
+Log:
+  - Added basic parsing abilities
