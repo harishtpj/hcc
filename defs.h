@@ -5,6 +5,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#define TEXTLEN 512
+
 // Token structure
 struct token {
   int token;
@@ -13,7 +15,7 @@ struct token {
 
 // Tokens
 enum {
-  T_EOF, T_PLUS, T_MINUS, T_STAR, T_SLASH, T_INTLIT
+  T_EOF, T_PLUS, T_MINUS, T_STAR, T_SLASH, T_INTLIT, T_SEMI, T_PRINT
 };
 
 // AST Node operations

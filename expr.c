@@ -14,14 +14,14 @@ static struct ASTnode *primary() {
         scan(&Token);
         return n;
     default:
-        fprintf(stderr, "syntax error on line %d\n", Line);
+        fprintf(stderr, "syntax error on line %d, token %d\n", Line, Token.token);
         exit(1);
     }
 }
 
 // Converts Token into AST operation
-int arithop(int token) {
-    switch (token) {
+int arithop(int tokentype) {
+    switch (tokentype) {
     case T_PLUS:
         return A_ADD;
     case T_MINUS:
@@ -31,7 +31,7 @@ int arithop(int token) {
     case T_SLASH:
         return A_DIVIDE;
     default:
-        fprintf(stderr, "unknown token in arithop() on line %d\n", Line);
+        fprintf(stderr, "syntax error on line %d, token %d\n", Line, tokentype);
         exit(1);
     }
 }
@@ -52,13 +52,13 @@ static int op_precedence(int tokentype) {
 
 // Return an AST tree whose root is a binary operator
 struct ASTnode *binexpr(int ptp) {
-    struct ASTnode *n, *left, *right;
+    struct ASTnode *left, *right;
     int tokentype;
 
     left = primary();
     
     tokentype = Token.token;
-    if (tokentype == T_EOF)
+    if (tokentype == T_SEMI)
         return left;
     
     while (op_precedence(tokentype) > ptp) {
@@ -67,7 +67,7 @@ struct ASTnode *binexpr(int ptp) {
         left = mkastnode(arithop(tokentype), left, right, 0);
 
         tokentype = Token.token;
-        if (tokentype == T_EOF)
+        if (tokentype == T_SEMI)
             return left;
     }
 
