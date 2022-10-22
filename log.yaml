@@ -14,7 +14,8 @@ Log:
 ---
 Day: 2
 Date: 22-10-2022
-Level: [2, 3]
+Level: [2, 3, 4]
 Log:
   - Added basic parsing abilities
   - Added precedence levels using pratt parser
+  - Added x86-64 asm generation

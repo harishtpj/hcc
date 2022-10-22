@@ -1,7 +1,8 @@
 CC = gcc
+SRC = hcc
 
-parser: expr.c interp.c main.c scan.c tree.c
-	$(CC) -o parser -g expr.c interp.c main.c scan.c tree.c
+comp: cg.c expr.c gen.c interp.c main.c scan.c tree.c
+	$(CC) -o $(SRC) -g cg.c expr.c gen.c interp.c main.c scan.c tree.c
 
 clean:
-	rm -f parser *.o
+	rm -f $(SRC) *.o *.s out
