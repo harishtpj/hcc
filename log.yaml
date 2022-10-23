@@ -24,6 +24,7 @@ Log:
 ---
 Day: 3
 Date: 23-10-2022
-Level: [6]
+Level: [6, 7]
 Log:
   - Added Variable Declarations
+  - Added Conditional Operators

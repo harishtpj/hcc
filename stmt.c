@@ -24,12 +24,12 @@ void assignment_statement(void) {
 
   ident();
 
-  if ((id = findglob(Text)) == -1) {
+  if ((id = findglob(Text)) == -1)
     fatals("Undeclared variable", Text);
-  }
+    
   right = mkastleaf(A_LVIDENT, id);
 
-  match(T_EQUALS, "=");
+  match(T_ASSIGN, "=");
 
   left = binexpr(0);
   tree = mkastnode(A_ASSIGN, left, right, 0);
