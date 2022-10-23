@@ -20,24 +20,20 @@ static int alloc_register() {
             return i;
         }
     }
-    fprintf(stderr, "Out of registers!\n");
-    exit(1);
+    fatal("Out of registers");
 }
 
 // Return a register to the list of available registers.
 static void free_register(int reg) {
-    if (freereg[reg] != 0) {
-        fprintf(stderr, "Error trying to free register %d\n", reg);
-        exit(1);
-    }
+    if (freereg[reg] != 0)
+      fatald("Error trying to free register", reg);
     freereg[reg] = 1;
 }
 
 // Prints out assembyl preamble
 void cgpreamble() {
   freeall_registers();
-  fputs(
-	"\t.text\n"
+  fputs("\t.text\n"
 	".LC0:\n"
 	"\t.string\t\"%d\\n\"\n"
 	"printint:\n"
@@ -56,26 +52,26 @@ void cgpreamble() {
 	"\n"
 	"\t.globl\tmain\n"
 	"\t.type\tmain, @function\n"
-	"main:\n"
-	"\tpushq\t%rbp\n"
-	"\tmovq	%rsp, %rbp\n",
-  Outfile);
+	"main:\n" "\tpushq\t%rbp\n" "\tmovq	%rsp, %rbp\n", Outfile);
 }
 
 // Print out the assembly postamble
 void cgpostamble() {
-  fputs(
-	"\tmovl	$0, %eax\n"
-	"\tpopq	%rbp\n"
-	"\tret\n",
-  Outfile);
+  fputs("\tmovl	$0, %eax\n" "\tpopq	%rbp\n" "\tret\n", Outfile);
 }
 
 // Load an integer literal value into a register.
-int cgload(int value) {
+int cgloadint(int value) {
     int r = alloc_register();
     fprintf(Outfile, "\tmovq\t$%d, %s\n", value, reglist[r]);
     return r;
+}
+
+// Load a value from a variable into a register. Return the number of the register
+int cgloadglob(char *identifier) {
+  int r = alloc_register();
+  fprintf(Outfile, "\tmovq\t%s(\%%rip), %s\n", identifier, reglist[r]);
+  return (r);
 }
 
 // Adds 2 registers
@@ -114,4 +110,15 @@ void cgprintint(int r) {
   fprintf(Outfile, "\tmovq\t%s, %%rdi\n", reglist[r]);
   fprintf(Outfile, "\tcall\tprintint\n");
   free_register(r);
+}
+
+// Store a register's value into a variable
+int cgstorglob(int r, char *identifier) {
+  fprintf(Outfile, "\tmovq\t%s, %s(\%%rip)\n", reglist[r], identifier);
+  return r;
+}
+
+// Generate a global symbol
+void cgglobsym(char *sym) {
+  fprintf(Outfile, "\t.comm\t%s,8,8\n", sym);
 }

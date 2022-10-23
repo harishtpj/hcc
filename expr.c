@@ -7,16 +7,25 @@
 // Parse a primary factor and return an AST node representing it.
 static struct ASTnode *primary() {
     struct ASTnode *n;
+    int id;
 
     switch (Token.token) {
     case T_INTLIT:
         n = mkastleaf(A_INTLIT, Token.intvalue);
-        scan(&Token);
-        return n;
+        break;
+    case T_IDENT:
+        id = findglob(Text);
+        if (id == -1)
+            fatals("Unknown variable", Text);
+
+        n = mkastleaf(A_IDENT, id);
+        break;
     default:
-        fprintf(stderr, "syntax error on line %d, token %d\n", Line, Token.token);
-        exit(1);
+        fatald("Syntax error, token", Token.token);
     }
+
+    scan(&Token);
+    return n;
 }
 
 // Converts Token into AST operation
@@ -31,8 +40,7 @@ int arithop(int tokentype) {
     case T_SLASH:
         return A_DIVIDE;
     default:
-        fprintf(stderr, "syntax error on line %d, token %d\n", Line, tokentype);
-        exit(1);
+        fatald("Syntax error, token", tokentype);
     }
 }
 
@@ -42,10 +50,8 @@ static int OpPrec[] = { 0, 10, 10, 20, 20, 0 };
 // Check that we have a binary operator and return its precedence.
 static int op_precedence(int tokentype) {
   int prec = OpPrec[tokentype];
-  if (prec == 0) {
-    fprintf(stderr, "syntax error on line %d, token %d\n", Line, tokentype);
-    exit(1);
-  }
+  if (prec == 0)
+    fatald("Syntax error, token", tokentype);
   return prec;
 }
 

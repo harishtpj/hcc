@@ -1,13 +1,14 @@
 CC = gcc
-SRC = hcc
+NAME = hcc
+SRCS= cg.c decl.c expr.c gen.c main.c misc.c scan.c stmt.c sym.c tree.c
 
-comp: cg.c expr.c gen.c main.c misc.c scan.c stmt.c tree.c
-	$(CC) -o $(SRC) -g cg.c expr.c gen.c main.c misc.c scan.c stmt.c tree.c
+comp: $(SRCS)
+	$(CC) -o $(NAME) -g $(SRCS)
 
 clean:
-	rm -f $(SRC) *.o *.s out
+	rm -f $(NAME) *.o *.s out
 
 test: comp scratch
-	./$(SRC) scratch
+	./$(NAME) scratch
 	$(CC) -o out out.s
 	./out

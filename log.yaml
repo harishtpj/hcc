@@ -20,3 +20,10 @@ Log:
   - Added precedence levels using pratt parser
   - Added x86-64 asm generation
   - Added print statement
+
+---
+Day: 3
+Date: 23-10-2022
+Level: [6]
+Log:
+  - Added Variable Declarations
