@@ -8,7 +8,7 @@ comp: $(SRCS)
 clean:
 	rm -f $(NAME) *.o *.s out
 
-test: comp scratch
-	./$(NAME) scratch
+test: comp scratch.c
+	./$(NAME) scratch.c
 	$(CC) -o out out.s
 	./out
