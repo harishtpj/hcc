@@ -32,7 +32,8 @@ Log:
 ---
 Day: 4
 Date: 24-10-2022
-Level: [8, 9]
+Level: [8, 9, 10]
 Log:
   - Added If-Else conditions
   - Added While loop
+  - Added For loop
