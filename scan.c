@@ -84,6 +84,10 @@ static int scanident(int c, char *buf, int lim) {
 // Return the matching keyword token number or 0 if it's not a keyword.
 static int keyword(char *s) {
   switch (*s) {
+    case 'c':
+      if (!strcmp(s, "char"))
+        return T_CHAR;
+      break;
     case 'e':
       if (!strcmp(s, "else"))
         return T_ELSE;

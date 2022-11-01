@@ -65,17 +65,21 @@ void cgfuncpostamble() {
 }
 
 // Load an integer literal value into a register.
-int cgloadint(int value) {
-    int r = alloc_register();
-    fprintf(Outfile, "\tmovq\t$%d, %s\n", value, reglist[r]);
-    return r;
+int cgloadint(int value, int type) {
+  int r = alloc_register();
+  fprintf(Outfile, "\tmovq\t$%d, %s\n", value, reglist[r]);
+  return (r);
 }
 
 // Load a value from a variable into a register. Return the number of the register
-int cgloadglob(char *identifier) {
+int cgloadglob(int id) {
   int r = alloc_register();
-  fprintf(Outfile, "\tmovq\t%s(\%%rip), %s\n", identifier, reglist[r]);
-  return (r);
+
+  if (Gsym[id].type == P_INT)
+    fprintf(Outfile, "\tmovq\t%s(\%%rip), %s\n", Gsym[id].name, reglist[r]);
+  else
+    fprintf(Outfile, "\tmovzbq\t%s(\%%rip), %s\n", Gsym[id].name, reglist[r]);
+  return r;
 }
 
 // Adds 2 registers
@@ -117,14 +121,20 @@ void cgprintint(int r) {
 }
 
 // Store a register's value into a variable
-int cgstorglob(int r, char *identifier) {
-  fprintf(Outfile, "\tmovq\t%s, %s(\%%rip)\n", reglist[r], identifier);
+int cgstorglob(int r, int id) {
+  if (Gsym[id].type == P_INT)
+    fprintf(Outfile, "\tmovq\t%s, %s(\%%rip)\n", reglist[r], Gsym[id].name);
+  else
+    fprintf(Outfile, "\tmovb\t%s, %s(\%%rip)\n", breglist[r], Gsym[id].name);
   return r;
 }
 
 // Generate a global symbol
-void cgglobsym(char *sym) {
-  fprintf(Outfile, "\t.comm\t%s,8,8\n", sym);
+void cgglobsym(int id) {
+  if (Gsym[id].type == P_INT)
+    fprintf(Outfile, "\t.comm\t%s,8,8\n", Gsym[id].name);
+  else
+    fprintf(Outfile, "\t.comm\t%s,1,1\n", Gsym[id].name);
 }
 
 // List of comparison instructions,
@@ -167,4 +177,8 @@ int cgcompare_and_jump(int ASTop, int r1, int r2, int label) {
   fprintf(Outfile, "\t%s\tL%d\n", invcmplist[ASTop - A_EQ], label);
   freeall_registers();
   return NOREG;
+}
+
+int cgwiden(int r, int oldtype, int newtype) {
+  return r;
 }
